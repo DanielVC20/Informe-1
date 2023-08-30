@@ -63,6 +63,26 @@ def grafica(datos, colores, etiquetas):
     plt.savefig("Grafica-fvsB.png")
     return None
 
+def calculos(datos, nombres):
+    for i in range(len(datos)):    
+        popt = datos[i][2]
+        pcov = datos[i][3]
+
+        sigmas = np.sqrt(np.diag(pcov))
+
+        m = popt[0]
+        sigma_m = sigmas[0]
+
+        gamma = 2*np.pi*m
+        sigma_gamma = 2*np.pi*sigma_m
+
+        g = gamma*h_bar/mu_N
+        sigma_g = sigma_gamma*h_bar/mu_N
+
+        print("gamma del {} = ({:.1f} +- {:.1f}) rad/Ts".format(nombres[i], gamma/1E8, sigma_gamma/1E8))
+        print("g del {} = {:.1f} +- {:.1f}".format(nombres[i], g, sigma_g)
+        print()
+    return None
 
 data_teflon = get_data("f-B-teflon.csv")
 data_glicerina = get_data("f-B-glicerina.csv")
@@ -80,30 +100,4 @@ grafica(datos, colores, etiquetas)
 h_bar = 1.054571817E-34
 mu_N = 5.050783E-27
 
-m = 1.14*1E8
-sigma_1 = 0.04*1E8
-sigma_2 = 0.02*1E8
-
-gamma_teflon = 2*np.pi*m
-gamma_glicerina = 2*np.pi*m
-
-sigma1_gamma = 2*np.pi*sigma_1
-sigma2_gamma = 2*np.pi*sigma_2
-
-g_teflon = gamma_teflon*h_bar/mu_N
-g_glicerina = gamma_glicerina*h_bar/mu_N
-
-sigma1_g = sigma1_gamma*h_bar/mu_N
-sigma2_g = sigma2_gamma*h_bar/mu_N
-
-print(g_teflon)
-print(sigma1_g)
-
-print(g_glicerina)
-print(sigma2_g)
-
-
-
-
-
-plt.show()
+calculos(datos, nombres)
